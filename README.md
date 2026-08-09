@@ -1,3 +1,36 @@
+# For Local Build
+
+## 1. Navigate to server directory
+cd server
+
+## 2. Create virtual environment
+python -m venv venv
+
+## 3. Activate virtual environment
+
+**On Windows:**
+.\venv\Scripts\activate
+**On Mac/Linux/Git Bash:**
+source venv/bin/activate
+
+## 4. Install dependencies
+pip install -r requirements.txt
+
+## 5. Set up environment variables
+
+**On Windows:**
+Copy-Item .env.example .env
+**On Mac/Linux/Git Bash:**
+cp .env.example .env
+
+Now open the `.env` file in any code editor and fill in your own values:
+- `DATABASE_URL` — your local PostgreSQL connection string (`postgresql://postgres:your_password@localhost:5432/sih_gis_db`)
+- `SECRET_KEY` — any random string (generate one with `python -c "import secrets; print(secrets.token_hex(32))"`)
+
+## 6. Run local development server
+uvicorn app.main:app --reload
+
+
 # 🔐 Authentication Architecture
 
 This project uses **OAuth2 with JWT (JSON Web Tokens)** for stateless authentication and **Argon2id** for password hashing. The interaction between Next.js, FastAPI, and PostgreSQL is completely decoupled and stateless.
