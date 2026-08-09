@@ -6,3 +6,5 @@ Pydantic schemas for the Field feature.
 Defines GeoJSON-compatible field creation/response models and
 scan result response schemas used by app/api/v1/fields.py.
 """
+
+print("app/schemas/field.py")
