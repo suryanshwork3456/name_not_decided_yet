@@ -8,3 +8,7 @@ token payloads used by app/api/v1/auth.py.
 """
 
 print("app/schemas/user.py")
+
+"""
+Write schemas for user authentication and user registration details.
+"""

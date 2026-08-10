@@ -8,3 +8,8 @@ get_db() dependency used by API routes to access the database.
 """
 
 print("app/db/session.py")
+
+
+"""
+Build the engine ,session factory and get_db() dependency for database access
+"""
