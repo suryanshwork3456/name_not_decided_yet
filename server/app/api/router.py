@@ -8,3 +8,7 @@ single router included by app/main.py.
 """
 
 print("app/api/router.py")
+
+"""
+Write router for API routes.
+"""
