@@ -80,7 +80,7 @@ This installs the exact package versions the team uses, including the SQLAlchemy
 
 ---
 
-## 5. Set VS Code's interpreter (do this once per machine)
+## 5. Set VS Code's interpreter (do this once per machine and it maybe optional for you)
 
 1. Open the project folder in VS Code
 2. Press `Ctrl+Shift+P` (Windows) or `Cmd+Shift+P` (Mac)
