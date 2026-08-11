@@ -1,22 +1,99 @@
-# For Local Build
+# Project Setup Guide
 
-## 1. Navigate to server directory
+This project requires **Python 3.14.x**. Older versions (3.11, 3.12, 3.13) are known to cause a SQLAlchemy compatibility error and will not work correctly.
+
+Follow the instructions for your OS below.
+
+---
+
+## 1. Install Python 3.14
+
+### Windows
+1. Go to https://www.python.org/downloads/windows/
+2. Download the **Windows installer (64-bit)** for Python 3.14.x
+3. Run the installer:
+   - ✅ Check **"Add python.exe to PATH"**
+   - Click **"Customize installation"**
+   - Keep all default optional features checked (pip, py launcher)
+   - Click **Install**
+4. Open a **new** terminal and verify:
+   ```powershell
+   py -0
+   ```
+   You should see `-V:3.14` in the list.
+
+### macOS
+1. Go to https://www.python.org/downloads/macos/
+2. Download the **macOS 64-bit universal2 installer** for Python 3.14.x
+3. Run the `.pkg` installer and follow the prompts (defaults are fine)
+4. Open a **new** terminal and verify:
+   ```bash
+   python3.14 --version
+   ```
+
+---
+
+## 2. Clone the repo
+
+```bash
+git clone <https://github.com/suryanshwork3456/name_not_decided_yet.git>
 cd server
+```
 
-## 2. Create virtual environment
-python -m venv venv
+If you already have the repo, pull the latest changes instead:
 
-## 3. Activate virtual environment
+```bash
+git pull origin main
+```
 
-**On Windows:**
-.\venv\Scripts\activate
-**On Mac/Linux/Git Bash:**
+---
+
+## 3. Create and activate the virtual environment
+
+### Windows (PowerShell)
+```powershell
+py -3.14 -m venv venv
+venv\Scripts\activate
+python --version   # should show Python 3.14.x
+```
+
+### macOS (Terminal)
+```bash
+python3.14 -m venv venv
 source venv/bin/activate
+python --version   # should show Python 3.14.x
+```
+
+You'll know it worked when your terminal prompt shows `(venv)` at the start.
+
+---
 
 ## 4. Install dependencies
-pip install -r requirements.txt
 
-## 5. Set up environment variables
+With the venv activated:
+
+```bash
+pip install -r requirements.txt
+```
+
+This installs the exact package versions the team uses, including the SQLAlchemy version that supports Python 3.14.
+
+---
+
+## 5. Set VS Code's interpreter (do this once per machine)
+
+1. Open the project folder in VS Code
+2. Press `Ctrl+Shift+P` (Windows) or `Cmd+Shift+P` (Mac)
+3. Type **"Python: Select Interpreter"**
+4. Choose the interpreter inside your `venv` folder:
+   - Windows: `.\venv\Scripts\python.exe`
+   - Mac: `./venv/bin/python`
+
+If it's not listed, choose **"Enter interpreter path" → "Find..."** and browse to the path above manually.
+
+---
+
+## 6. Set up environment variables
 
 **On Windows:**
 Copy-Item .env.example .env
@@ -26,9 +103,73 @@ cp .env.example .env
 Now open the `.env` file in any code editor and fill in your own values:
 - `DATABASE_URL` — your local PostgreSQL connection string (`postgresql://postgres:your_password@localhost:5432/sih_gis_db`)
 - `SECRET_KEY` — any random string (generate one with `python -c "import secrets; print(secrets.token_hex(32))"`)
+- `PORT` — Port is 8000
 
-## 6. Run local development server
+
+## 7. Run the server
+
+```bash
 uvicorn app.main:app --reload
+```
+
+Server should start at `http://127.0.0.1:8000` with no import errors.
+
+---
+
+## Daily workflow (after initial setup)
+
+Every time you start working:
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# Mac
+source venv/bin/activate
+
+git pull origin main
+pip install -r requirements.txt   # only needed if requirements.txt changed
+uvicorn app.main:app --reload
+```
+
+When you're done:
+
+```bash
+deactivate
+```
+
+---
+
+## Updating requirements.txt (only if you added a new package)
+
+```bash
+pip install <new-package>
+pip freeze > requirements.txt
+git add requirements.txt
+git commit -m "Update requirements"
+git push
+```
+
+Let teammates know to re-run `pip install -r requirements.txt` after pulling.
+
+---
+
+## Troubleshooting
+
+**`AssertionError: Class ... directly inherits TypingOnly ...`**
+You're on the wrong Python version or an outdated SQLAlchemy. Confirm:
+```bash
+python --version      # must be 3.14.x
+pip show sqlalchemy   # must be 2.0.41 or higher
+```
+If either is wrong, delete `venv` and redo Step 3–4.
+
+**`py -3.14` / `python3.14` not found**
+Python 3.14 isn't installed or isn't on PATH. Reinstall following Step 1, and make sure "Add to PATH" was checked (Windows) or reopen your terminal (Mac).
+
+**VS Code still shows the wrong Python version**
+Redo Step 5 — VS Code caches the interpreter per-workspace and won't auto-switch after you recreate a venv.
+
 
 
 # 🔐 Authentication Architecture
